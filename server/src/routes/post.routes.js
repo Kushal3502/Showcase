@@ -1,11 +1,9 @@
 import { Router } from "express";
 import { validateAccessToken } from "../middlewares/auth.middleware.js";
-import { createPost } from "../controller/post.controller.js";
+import { createPost, getAllPosts } from "../controller/post.controller.js";
 
 const router = Router();
 
-router.use(validateAccessToken);
-
-router.route("/").post(createPost);
+router.route("/").get(getAllPosts).post(validateAccessToken, createPost);
 
 export default router;
