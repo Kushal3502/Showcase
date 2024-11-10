@@ -7,9 +7,9 @@ import {
 } from "../utils/generateTokens.js";
 
 export const registerUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, avatar, password } = req.body;
 
-  if (!username || !password)
+  if (!username || !avatar || !password)
     return res
       .status(400)
       .json({ success: false, message: "All fields are required" });
@@ -26,6 +26,7 @@ export const registerUser = async (req, res) => {
 
     const user = await User.create({
       username,
+      avatar,
       password: hashedPassword,
     });
 
