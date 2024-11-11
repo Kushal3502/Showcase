@@ -2,8 +2,10 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
+  decodeToken,
   generateAccessToken,
   generateRefreshToken,
+  validateToken,
 } from "../utils/generateTokens.js";
 
 export const registerUser = async (req, res) => {
@@ -98,6 +100,19 @@ export const logout = async (req, res) => {
     .clearCookie("accessToken")
     .status(200)
     .json({ success: true, message: "User logged out successfully" });
+};
+
+export const checkAuth = async (req, res) => {
+  const token = req.cookies.refreshToken;
+
+  if (token && validateToken(token)) {
+    const user = decodeToken(token);
+    return res.status(200).json({ success: true, currentUser: user });
+  } else {
+    return res
+      .status(401)
+      .json({ success: false, message: "User not authenticated" });
+  }
 };
 
 export const refreshAccessToken = (req, res) => {

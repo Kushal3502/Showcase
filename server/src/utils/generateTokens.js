@@ -33,3 +33,19 @@ export const generateAccessToken = (res, user) => {
 
   return accessToken;
 };
+
+export const validateToken = (token) => {
+  try {
+    return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+  } catch (error) {
+    console.log("Invalid or expired token :: ", error);
+  }
+};
+
+export const decodeToken = (token) => {
+  try {
+    return jwt.decode(token);
+  } catch (error) {
+    console.log("Token decode falied :: ", error);
+  }
+};
