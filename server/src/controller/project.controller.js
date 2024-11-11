@@ -1,31 +1,33 @@
 import mongoose from "mongoose";
-import { Post } from "../models/post.model.js";
+import { Project } from "../models/project.model.js";
 import { User } from "../models/user.model.js";
 
-export const createPost = async (req, res) => {
-  const { content, image } = req.body;
+export const createProject = async (req, res) => {
+  const { title, thumbnail, content, category } = req.body;
 
-  if (!content || !image || content.trim() === "")
+  if ([title, thumbnail, content].some((value) => value?.trim() === ""))
     return res
       .status(400)
       .json({ success: false, message: "All fields are required" });
 
   try {
-    const newPost = await Post.create({
+    const newProject = await Project.create({
+      title,
+      thumbnail,
+      category,
       content,
       owner: req.user?.id,
-      image,
     });
 
-    if (!newPost)
+    if (!newProject)
       return res
         .status(400)
-        .json({ success: false, message: "Post not created" });
+        .json({ success: false, message: "Project not created" });
 
     return res.status(201).json({
       success: true,
-      post: newPost,
-      message: "Post created successfully",
+      project: newProject,
+      message: "Project created successfully",
     });
   } catch (error) {
     console.log(error);
@@ -33,13 +35,12 @@ export const createPost = async (req, res) => {
   }
 };
 
-export const getAllPosts = async (req, res) => {
+export const getAllProjects = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
 
   try {
-    const posts = await Post.aggregate([
+    const projects = await Project.aggregate([
       {
-        //   adds the user field to data
         $lookup: {
           from: "users",
           localField: "owner",
@@ -69,19 +70,23 @@ export const getAllPosts = async (req, res) => {
       },
     ]);
 
-    if (!posts || posts.length === 0)
-      return res.status(400).json({ success: false, message: "No post found" });
+    if (!projects || projects.length === 0)
+      return res
+        .status(400)
+        .json({ success: false, message: "No project found" });
 
-    return res
-      .status(200)
-      .json({ success: true, posts, message: "Posts fetched successfully" });
+    return res.status(200).json({
+      success: true,
+      projects,
+      message: "Projects fetched successfully",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
 
-export const getUserPosts = async (req, res) => {
+export const getUserProjects = async (req, res) => {
   const { userId } = req.params;
 
   if (!userId)
@@ -97,7 +102,7 @@ export const getUserPosts = async (req, res) => {
         .json({ success: false, message: "User not found" });
 
     // find posts
-    const posts = await Post.aggregate([
+    const projects = await Project.aggregate([
       {
         $match: {
           owner: new mongoose.Types.ObjectId(userId),
@@ -124,29 +129,35 @@ export const getUserPosts = async (req, res) => {
       },
     ]);
 
-    if (!posts || posts.length === 0)
-      return res.status(400).json({ success: false, message: "No post found" });
+    if (!projects || projects.length === 0)
+      return res
+        .status(400)
+        .json({ success: false, message: "No project found" });
 
-    return res
-      .status(200)
-      .json({ success: true, posts, message: "Posts fetched successfully" });
+    return res.status(200).json({
+      success: true,
+      projects,
+      message: "Projects fetched successfully",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
 
-export const getPostById = async (req, res) => {
-  const { postId } = req.params;
+export const getProjectById = async (req, res) => {
+  const { projectId } = req.params;
 
-  if (!postId)
-    return res.status(400).json({ success: false, message: "Invalid postId" });
+  if (!projectId)
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid projectId" });
 
   try {
-    const post = await Post.aggregate([
+    const project = await Project.aggregate([
       {
         $match: {
-          _id: new mongoose.Types.ObjectId(postId),
+          _id: new mongoose.Types.ObjectId(projectId),
         },
       },
       {
@@ -170,13 +181,15 @@ export const getPostById = async (req, res) => {
       },
     ]);
 
-    if (!post)
-      return res.status(400).json({ success: false, message: "No post found" });
+    if (!project)
+      return res
+        .status(400)
+        .json({ success: false, message: "No project found" });
 
     return res.status(200).json({
       success: true,
-      post: post[0],
-      message: "Post fetched successfully",
+      project: project[0],
+      message: "Project fetched successfully",
     });
   } catch (error) {
     console.log(error);
@@ -184,28 +197,32 @@ export const getPostById = async (req, res) => {
   }
 };
 
-export const updatePost = async (req, res) => {
-  const { postId } = req.params;
+export const updateProject = async (req, res) => {
+  const { projectId } = req.params;
 
-  if (!postId)
-    return res.status(400).json({ success: false, message: "Invalid postId" });
+  if (!projectId)
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid projectId" });
 
   try {
-    const post = await Post.findById(postId);
+    const project = await Project.findById(projectId);
 
-    if (!post)
+    if (!project)
       return res
         .status(400)
-        .json({ success: false, message: "Post not found" });
+        .json({ success: false, message: "Project not found" });
 
-    const { content, image } = req.body;
+    const { title, content, thumbnail, category } = req.body;
     const updatedFields = {};
 
+    if (title !== undefined) updatedFields.title = title;
+    if (category !== undefined) updatedFields.category = category;
+    if (thumbnail !== undefined) updatedFields.thumbnail = thumbnail;
     if (content !== undefined) updatedFields.content = content;
-    if (image !== undefined) updatedFields.image = image;
 
-    const updatedPost = await Post.findByIdAndUpdate(
-      postId,
+    const updatedProject = await Project.findByIdAndUpdate(
+      projectId,
       {
         $set: updatedFields,
       },
@@ -214,8 +231,8 @@ export const updatePost = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      post: updatedPost,
-      message: "Post updated successfully",
+      project: updatedProject,
+      message: "Project updated successfully",
     });
   } catch (error) {
     console.log(error);
@@ -223,25 +240,27 @@ export const updatePost = async (req, res) => {
   }
 };
 
-export const deletePost = async (req, res) => {
-  const { postId } = req.params;
+export const deleteProject = async (req, res) => {
+  const { projectId } = req.params;
 
-  if (!postId)
-    return res.status(400).json({ success: false, message: "Invalid postId" });
+  if (!projectId)
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid projectId" });
 
   try {
-    const post = await Post.findById(postId);
+    const project = await Project.findById(projectId);
 
-    if (!post)
+    if (!project)
       return res
         .status(400)
-        .json({ success: false, message: "Post not found" });
+        .json({ success: false, message: "Project not found" });
 
-    await Post.findByIdAndDelete(postId);
+    await Project.findByIdAndDelete(projectId);
 
     return res.status(200).json({
       success: true,
-      message: "Post deleted successfully",
+      message: "Project deleted successfully",
     });
   } catch (error) {
     console.log(error);

@@ -22,11 +22,13 @@ app.use(cookieParser());
 // routes
 import userRouter from "./routes/user.routes.js";
 import postRouter from "./routes/post.routes.js";
+import projectRouter from "./routes/project.routes.js";
 import mediaRouter from "./routes/media.routes.js";
 import likeRouter from "./routes/like.routes.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
+app.use("/api/v1/projects", projectRouter);
 app.use("/api/v1/media", mediaRouter);
 app.use("/api/v1/likes", likeRouter);
 
