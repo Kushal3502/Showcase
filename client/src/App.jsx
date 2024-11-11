@@ -1,7 +1,12 @@
 import React from "react";
+import { Button } from "./components/ui/button";
 
 function App() {
-  return <h1 className="text-3xl font-bold underline">Showcase</h1>;
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  );
 }
 
 export default App;
