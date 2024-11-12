@@ -5,6 +5,7 @@ export const AuthContext = createContext(null);
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState();
+  const [githubData, setGithubData] = useState();
 
   const authStatus = async () => {
     const response = await get("/users/me");
@@ -24,7 +25,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const register = async (data) => {
+  const registerUser = async (data) => {
     try {
       const response = await post("users/register", data);
 
@@ -41,11 +42,13 @@ export const AuthContextProvider = ({ children }) => {
 
       if (response.success) {
         setUser(response.user);
+        return response.user;
       }
-
-      return response.user;
     } catch (error) {
-      console.log("Login error :: ", error);
+      console.log("Login error :: ", error.response.data);
+      if (error.response?.data) {
+        throw new Error(error.response.data.message || "Login failed");
+      }
     }
   };
 
@@ -67,7 +70,17 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, register, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        githubData,
+        setGithubData,
+        registerUser,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

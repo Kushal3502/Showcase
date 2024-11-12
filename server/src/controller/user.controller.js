@@ -116,19 +116,23 @@ export const checkAuth = async (req, res) => {
 };
 
 export const refreshAccessToken = (req, res) => {
-  const token = req.cookies.refreshToken;
+  if (!req.cookies.accessToken) {
+    const token = req.cookies.refreshToken;
 
-  if (!token)
-    return res.status(401).json({ success: false, message: "Invalid token" });
+    if (!token)
+      return res.status(401).json({ success: false, message: "Invalid token" });
 
-  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err)
-      return res
-        .status(403)
-        .json({ success: false, message: "Unauthorized request" });
+    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+      if (err)
+        return res
+          .status(403)
+          .json({ success: false, message: "Unauthorized request" });
 
-    const accessToken = generateAccessToken(res, user);
+      const accessToken = generateAccessToken(res, user);
 
-    res.json({ accessToken });
-  });
+      res.json({ accessToken });
+    });
+  } else {
+    return res.status(200).json({ message: "Access token is still valid" });
+  }
 };

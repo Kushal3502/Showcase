@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "./components/ui/button";
+import { Outlet } from "react-router-dom";
+import useAuth from "./context/authContext";
 
 function App() {
+  const {githubData} = useAuth()
+  useEffect(() => {
+    console.log(githubData);
+  },[])
   return (
     <div>
-      <Button>Click me</Button>
+      Showcase
+      <Outlet />
     </div>
   );
 }
