@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
-import { Button } from "./components/ui/button";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import useAuth from "./context/authContext";
+import { Navbar } from "./components";
 
 function App() {
-  const {githubData} = useAuth()
-  useEffect(() => {
-    console.log(githubData);
-  },[])
   return (
-    <div>
-      Showcase
+    <div className=" min-h-screen">
+      <Navbar />
+      <div className=" md:px-40 px-8">
       <Outlet />
+
+      </div>
     </div>
   );
 }

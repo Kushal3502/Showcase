@@ -1,4 +1,5 @@
 import { get, post } from "@/utils/api";
+import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext(null);
@@ -10,7 +11,13 @@ export const AuthContextProvider = ({ children }) => {
   const authStatus = async () => {
     const response = await get("/users/me");
 
-    if (response.currentUser) setUser(response.currentUser);
+    if (response.currentUser) {
+      setUser(response.currentUser);
+      const res = await axios.get(
+        `https://api.github.com/users/${response.currentUser.username}`
+      );
+      setGithubData(res.data);
+    }
   };
 
   const refreshToken = async () => {
@@ -58,6 +65,7 @@ export const AuthContextProvider = ({ children }) => {
 
       if (response.success) {
         setUser(null);
+        setGithubData(null);
       }
     } catch (error) {
       console.log("Logout error :: ", error);
@@ -66,7 +74,7 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     authStatus();
-    refreshToken();
+    // refreshToken();
   }, []);
 
   return (
