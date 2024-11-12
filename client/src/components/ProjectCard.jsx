@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 function ProjectCard({ project }) {
   return (
     <Card className="bg-transparent text-white hover:bg-zinc-800 hover:cursor-pointer">
-      <Link to={`/${project._id}`}>
+      <Link to={`/project/${project._id}`}>
         <CardHeader>
           <CardTitle>{project.title}</CardTitle>
         </CardHeader>

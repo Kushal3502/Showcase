@@ -4,11 +4,10 @@ import { Navbar } from "./components";
 
 function App() {
   return (
-    <div className=" min-h-screen">
+    <div className="w-full min-h-screen">
       <Navbar />
-      <div className=" md:px-40 px-8">
-      <Outlet />
-
+      <div className="md:px-40 p-8 flex justify-center">
+          <Outlet />
       </div>
     </div>
   );

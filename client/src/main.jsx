@@ -3,7 +3,18 @@ import "./index.css";
 import App from "./App.jsx";
 import { AuthContextProvider } from "./context/authContext";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { AuthLayout, Home, Login, Post, Profile, Register } from "./pages";
+import {
+  AddProject,
+  AuthLayout,
+  EditProject,
+  Home,
+  Login,
+  Post,
+  Profile,
+  Project,
+  Register,
+  ViewProject,
+} from "./pages";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +24,24 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "project",
+        element: <Project />,
+        children: [
+          {
+            path: ":projectId",
+            element: <ViewProject />,
+          },
+          {
+            path: ":projectId/edit",
+            element: <EditProject />,
+          },
+          {
+            path: "add",
+            element: <AddProject />,
+          },
+        ],
       },
       {
         path: "discuss",

@@ -16,7 +16,7 @@ function Home() {
   }, []);
 
   return (
-    <div className=" grid md:grid-cols-4 grid-cols-1 gap-12 py-12">
+    <div className=" grid md:grid-cols-4 grid-cols-1 gap-12 py-12">      
       {projects &&
         projects.map((project) => (
           <div key={project._id}>
