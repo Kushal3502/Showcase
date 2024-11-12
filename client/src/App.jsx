@@ -6,8 +6,8 @@ function App() {
   return (
     <div className="w-full min-h-screen">
       <Navbar />
-      <div className="md:px-40 p-8 flex justify-center">
-          <Outlet />
+      <div className=" md:px-28 p-8">
+        <Outlet />
       </div>
     </div>
   );
