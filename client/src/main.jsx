@@ -4,15 +4,18 @@ import App from "./App.jsx";
 import { AuthContextProvider } from "./context/authContext";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import {
+  AddPost,
   AddProject,
   AuthLayout,
   EditProject,
   Home,
   Login,
   Post,
+  PostLayout,
   Profile,
   Project,
   Register,
+  ViewPost,
   ViewProject,
 } from "./pages";
 
@@ -45,7 +48,21 @@ const router = createBrowserRouter([
       },
       {
         path: "discuss",
-        element: <Post />,
+        element: <PostLayout />,
+        children: [
+          {
+            path: "",
+            element: <Post />,
+          },
+          {
+            path: "add",
+            element: <AddPost />,
+          },
+          {
+            path: ":postId",
+            element: <ViewPost />,
+          },
+        ],
       },
       {
         path: "profile",

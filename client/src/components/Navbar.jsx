@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 import { post } from "@/utils/api";
 
 function Navbar() {
-  const { githubData } = useAuth();
+  const { githubData, user } = useAuth();
 
   const navigate = useNavigate();
 
@@ -41,21 +41,29 @@ function Navbar() {
             Discuss
           </Link>
         </li>
-        <li className="cursor-pointer hover:text-zinc-300 transition-colors">
-          <Link to="/project/add" className="font-medium">
-            Add Project
-          </Link>
-        </li>
-        <li className="cursor-pointer hover:text-zinc-300 transition-colors">
-          <Link to="/profile" className="font-medium">
-            Profile
-          </Link>
-        </li>
-        <li className="cursor-pointer hover:text-zinc-300 transition-colors">
-          <Button variant="destructive" onClick={handleLogout}>
-            Logout
+        {user ? (
+          <>
+            <li className="cursor-pointer hover:text-zinc-300 transition-colors">
+              <Link to="/project/add" className="font-medium">
+                Add Project
+              </Link>
+            </li>
+            <li className="cursor-pointer hover:text-zinc-300 transition-colors">
+              <Link to="/profile" className="font-medium">
+                Profile
+              </Link>
+            </li>
+            <li className="cursor-pointer hover:text-zinc-300 transition-colors">
+              <Button variant="destructive" onClick={handleLogout}>
+                Logout
+              </Button>
+            </li>
+          </>
+        ) : (
+          <Button variant="secondary" onClick={() => navigate("/auth/login")}>
+            Login
           </Button>
-        </li>
+        )}
       </ul>
       <div className=" flex items-center gap-4">
         <p className=" md:block hidden">Welcome, {githubData?.name}</p>

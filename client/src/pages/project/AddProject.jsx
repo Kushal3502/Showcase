@@ -43,6 +43,7 @@ function AddProject() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <h1 className=" text-4xl">Add project</h1>
       <div>
         <Label htmlFor="thumbnail">Thumbnail:</Label>
         <Input
