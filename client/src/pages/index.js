@@ -3,6 +3,9 @@ import Register from "./auth/Register";
 import Login from "./auth/Login";
 import Home from "./Home/Home";
 import Post from "./discuss/Post";
+import AddPost from "./discuss/AddPost";
+import PostLayout from "./discuss/PostLayout";
+import ViewPost from "./discuss/ViewPost";
 import Profile from "./profile/Profile";
 import Project from "./project/Project";
 import AddProject from "./project/AddProject";
@@ -15,6 +18,9 @@ export {
   Login,
   Home,
   Post,
+  PostLayout,
+  ViewPost,
+  AddPost,
   Profile,
   Project,
   AddProject,

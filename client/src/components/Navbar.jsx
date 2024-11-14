@@ -27,7 +27,7 @@ function Navbar() {
     }
   };
 
-    return (
+  return (
     <nav className=" flex justify-between md:px-12 md:py-4 p-4 border-b border-b-slate-600">
       <h2 className=" text-3xl">Showcase</h2>
       <ul className=" hidden md:flex items-center gap-12">
@@ -39,6 +39,11 @@ function Navbar() {
         <li className="cursor-pointer hover:text-zinc-300 transition-colors">
           <Link to="/discuss" className="font-medium">
             Discuss
+          </Link>
+        </li>
+        <li className="cursor-pointer hover:text-zinc-300 transition-colors">
+          <Link to="/project/add" className="font-medium">
+            Add Project
           </Link>
         </li>
         <li className="cursor-pointer hover:text-zinc-300 transition-colors">

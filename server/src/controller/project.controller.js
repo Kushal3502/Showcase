@@ -3,9 +3,13 @@ import { Project } from "../models/project.model.js";
 import { User } from "../models/user.model.js";
 
 export const createProject = async (req, res) => {
-  const { title, thumbnail, content, category } = req.body;
+  const { title, thumbnail, githubRepo, liveUrl, content, category } = req.body;
 
-  if ([title, thumbnail, content].some((value) => value?.trim() === ""))
+  if (
+    [title, thumbnail, githubRepo, liveUrl, content].some(
+      (value) => value?.trim() === ""
+    )
+  )
     return res
       .status(400)
       .json({ success: false, message: "All fields are required" });
@@ -14,6 +18,8 @@ export const createProject = async (req, res) => {
     const newProject = await Project.create({
       title,
       thumbnail,
+      githubRepo,
+      liveUrl,
       category,
       content,
       owner: req.user?.id,
