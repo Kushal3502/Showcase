@@ -77,7 +77,7 @@ function Navbar() {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="md:hidden block m-4 border-gray-400 bg-[#18181B] text-white w-52">
+          <DropdownMenuContent className=" m-4 border-gray-400 bg-[#18181B] text-white w-52">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>

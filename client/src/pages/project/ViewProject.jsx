@@ -1,15 +1,18 @@
 import { get } from "@/utils/api";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { ExternalLink, Github } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import { ExternalLink, Github, Pencil, Trash2 } from "lucide-react";
+import useAuth from "@/context/authContext";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 function ViewProject() {
   const { projectId } = useParams();
   const [project, setProject] = useState();
+  const { user } = useAuth();
 
   const fetchProjectDetails = async (projectId) => {
     const projecDetails = await get(`/projects/${projectId}`);
@@ -36,12 +39,16 @@ function ViewProject() {
                   alt="Project Thumbnail"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black opacity-50"></div>
               </AspectRatio>
             </div>
             <div className="flex flex-col justify-end gap-4">
               <h1 className="text-4xl text-right">{project.title}</h1>
-              <div className=" flex items-center gap-4">
+              <div className=" flex justify-start gap-2 lg:pl-16 pl-12 mt-2">
+                {project.category.map((category) => (
+                  <Badge variant="secondary">{category}</Badge>
+                ))}
+              </div>
+              <div className=" flex items-center justify-end gap-4 mt-4">
                 <Avatar>
                   <AvatarImage
                     src={
@@ -68,6 +75,21 @@ function ViewProject() {
                   <ExternalLink className="h-5 w-5 sm:h-6 sm:w-6" />
                 </a>
               </div>
+              {user.id === project.owner._id && (
+                <div className=" flex gap-2 justify-end">
+                  <Link to={``}>
+                    <Button className="bg-green-700 hover:bg-green-800 px-2 sm:px-4 py-2 rounded-md">
+                      <Pencil />
+                    </Button>
+                  </Link>
+                  <Button
+                    className="bg-red-600 hover:bg-red-700 px-2 sm:px-4 py-2 rounded-md"
+                    // onClick={handlePlaylistDelete}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
           <div className=" text-justify mt-12">{parse(project.content)}</div>

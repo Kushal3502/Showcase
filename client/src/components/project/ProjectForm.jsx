@@ -28,7 +28,6 @@ const extensions = [
   Color,
   FontFamily,
   FontSize,
-  Heading,
   Highlight,
   HorizontalRule,
   Image.configure({
