@@ -1,3 +1,4 @@
+import { post } from "@/utils/api";
 import React from "react";
 import { Controller } from "react-hook-form";
 import RichTextEditor, {
@@ -32,16 +33,38 @@ const extensions = [
   HorizontalRule,
   Image.configure({
     upload: (file) => {
-      return new Promise((resolve,reject) => {
-        console.log(file);
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const formData = new FormData();
+          formData.append("media", file);
+          console.log(formData);
+
+          post("/media/", formData).then((response) => {
+            if (!response.success) {
+              throw new Error("Network response was not ok");
+            }
+            console.log(response);
+          });
+          resolve(URL.createObjectURL(file));
+        }, 500);
       });
     },
   }),
   Video.configure({
-    upload: (files) => {
+    upload: (file) => {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve(URL.createObjectURL(files));
+          const formData = new FormData();
+          formData.append("media", file);
+          console.log(formData);
+
+          post("/media/", formData).then((response) => {
+            if (!response.success) {
+              throw new Error("Network response was not ok");
+            }
+            console.log(response);
+          });
+          resolve(URL.createObjectURL(file));
         }, 500);
       });
     },
